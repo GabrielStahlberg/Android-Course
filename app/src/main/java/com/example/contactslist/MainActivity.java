@@ -3,8 +3,8 @@ package com.example.contactslist;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,16 +17,10 @@ public class MainActivity extends Activity {
     super.onCreate(saveInstanceState);
     setContentView(R.layout.activity_main);
 
-    List<String> students = new ArrayList<>(Arrays.asList("Alex", "Smith", "John"));
+    List<String> students = new ArrayList<>(Arrays.asList("Alex", "Smith", "John", "Eric", "Maxell"));
 
-    TextView first = findViewById(R.id.textView);
-    TextView second = findViewById(R.id.textView2);
-    TextView third = findViewById(R.id.textView3);
-
-    first.setText(students.get(0));
-    second.setText(students.get(1));
-    third.setText(students.get(2));
-
+    ListView studentsList = findViewById(R.id.activity_main_students_list);
+    studentsList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, students));
   }
 
 }
