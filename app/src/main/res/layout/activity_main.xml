@@ -11,6 +11,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:src="@drawable/ic_action_add"
         android:focusable="true" />
 
     <ListView
