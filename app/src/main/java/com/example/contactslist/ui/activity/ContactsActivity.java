@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.contactslist.R;
 import com.example.contactslist.dao.StudentDao;
+import com.example.contactslist.model.Student;
+
+import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
 
@@ -25,6 +30,9 @@ public class ContactsActivity extends AppCompatActivity {
     setTitle(APP_BAR_TITLE);
 
     ConfigFABNewStudent();
+
+    dao.save(new Student("Gabriel", "1", "gabriel@gmail.com"));
+    dao.save(new Student("Marcela", "2", "marcela@gmail.com"));
   }
 
   private void ConfigFABNewStudent() {
@@ -49,6 +57,20 @@ public class ContactsActivity extends AppCompatActivity {
 
   private void configList() {
     ListView studentsList = findViewById(R.id.activity_contacts_list);
-    studentsList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.findAll()));
+    final List<Student> students = dao.findAll();
+    studentsList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, students));
+
+
+    studentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Student studentClicked = students.get(position);
+        Intent goToFormStudentActivity = new Intent(ContactsActivity.this, FormStudentActivity.class);
+
+        goToFormStudentActivity.putExtra("student", studentClicked);
+
+        startActivity(goToFormStudentActivity);
+      }
+    });
   }
 }

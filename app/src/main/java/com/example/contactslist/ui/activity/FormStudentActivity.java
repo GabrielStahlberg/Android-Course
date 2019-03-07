@@ -1,5 +1,6 @@
 package com.example.contactslist.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.EditText;
 import com.example.contactslist.R;
 import com.example.contactslist.dao.StudentDao;
 import com.example.contactslist.model.Student;
+
+import java.io.Serializable;
 
 public class FormStudentActivity extends AppCompatActivity {
 
@@ -28,6 +31,13 @@ public class FormStudentActivity extends AppCompatActivity {
     init();
 
     configBtnSave();
+
+    Intent datas = getIntent();
+    Student student = (Student) datas.getSerializableExtra("student");
+
+    fieldName.setText(student.getName());
+    fieldPhone.setText(student.getPhone());
+    fieldEmail.setText(student.getEmail());
   }
 
   private void configBtnSave() {
