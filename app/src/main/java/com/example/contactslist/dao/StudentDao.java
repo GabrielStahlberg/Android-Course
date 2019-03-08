@@ -39,4 +39,11 @@ public class StudentDao {
   public List<Student> findAll() {
     return new ArrayList<>(students);
   }
+
+  public void remove(Student student) {
+    Student studentFound = findStudentById(student);
+    if(studentFound != null){
+      students.remove(studentFound);
+    }
+  }
 }

@@ -23,6 +23,7 @@ public class ContactsActivity extends AppCompatActivity {
 
   public static final String APP_BAR_TITLE = "Contacts";
   private StudentDao dao = new StudentDao();
+  private ArrayAdapter<Student> adapter;
 
   @Override
   protected void onCreate(@Nullable Bundle saveInstanceState) {
@@ -32,6 +33,8 @@ public class ContactsActivity extends AppCompatActivity {
     setTitle(APP_BAR_TITLE);
 
     ConfigFABNewStudent();
+
+    configList();
 
     dao.save(new Student("Gabriel", "1", "gabriel@gmail.com"));
     dao.save(new Student("Marcela", "2", "marcela@gmail.com"));
@@ -54,15 +57,37 @@ public class ContactsActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    configList();
+    updateStudents();
+  }
+
+  private void updateStudents() {
+    adapter.clear();
+    adapter.addAll(dao.findAll());
   }
 
   private void configList() {
     ListView studentsList = findViewById(R.id.activity_contacts_list);
-    final List<Student> students = dao.findAll();
-    configAdapter(studentsList, students);
+    configAdapter(studentsList);
 
     configListenerClickByItem(studentsList);
+
+    configListenerLongClick(studentsList);
+  }
+
+  private void configListenerLongClick(ListView studentsList) {
+    studentsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+      @Override
+      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Student studentClicked = (Student) parent.getItemAtPosition(position);
+        removeStudent(studentClicked);
+        return true;
+      }
+    });
+  }
+
+  private void removeStudent(Student student) {
+    dao.remove(student);
+    adapter.remove(student);
   }
 
   private void configListenerClickByItem(ListView studentsList) {
@@ -83,7 +108,8 @@ public class ContactsActivity extends AppCompatActivity {
     startActivity(goToFormStudentActivity);
   }
 
-  private void configAdapter(ListView studentsList, List<Student> students) {
-    studentsList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, students));
+  private void configAdapter(ListView studentsList) {
+    adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    studentsList.setAdapter(adapter);
   }
 }
