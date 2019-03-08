@@ -17,6 +17,8 @@ import com.example.contactslist.model.Student;
 
 import java.util.List;
 
+import static com.example.contactslist.ui.activity.ActivitiesConst.KEY_STUDENT;
+
 public class ContactsActivity extends AppCompatActivity {
 
   public static final String APP_BAR_TITLE = "Contacts";
@@ -58,19 +60,30 @@ public class ContactsActivity extends AppCompatActivity {
   private void configList() {
     ListView studentsList = findViewById(R.id.activity_contacts_list);
     final List<Student> students = dao.findAll();
-    studentsList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, students));
+    configAdapter(studentsList, students);
 
+    configListenerClickByItem(studentsList);
+  }
 
+  private void configListenerClickByItem(ListView studentsList) {
     studentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Student studentClicked = students.get(position);
-        Intent goToFormStudentActivity = new Intent(ContactsActivity.this, FormStudentActivity.class);
-
-        goToFormStudentActivity.putExtra("student", studentClicked);
-
-        startActivity(goToFormStudentActivity);
+        Student studentClicked = (Student) parent.getItemAtPosition(position);
+        openFormEditStudent(studentClicked);
       }
     });
+  }
+
+  private void openFormEditStudent(Student studentClicked) {
+    Intent goToFormStudentActivity = new Intent(ContactsActivity.this, FormStudentActivity.class);
+
+    goToFormStudentActivity.putExtra(KEY_STUDENT, studentClicked);
+
+    startActivity(goToFormStudentActivity);
+  }
+
+  private void configAdapter(ListView studentsList, List<Student> students) {
+    studentsList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, students));
   }
 }
