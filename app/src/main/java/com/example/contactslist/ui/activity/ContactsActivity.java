@@ -38,7 +38,6 @@ public class ContactsActivity extends AppCompatActivity {
 
     configList();
 
-
     dao.save(new Student("Gabriel", "1", "gabriel@gmail.com"));
     dao.save(new Student("Marcela", "2", "marcela@gmail.com"));
   }
